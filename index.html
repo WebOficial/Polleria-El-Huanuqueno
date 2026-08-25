@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Huanuqueño · Pedido online</title>
+  <style>
+    :root{--bg:#f6f6f4;--card:#fff;--ink:#171717;--muted:#6b6b6b;--accent:#111;--line:#e7e7e7;--ok:#1f8f4e;--danger:#b42318}
+    *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+    button,input,select,textarea{font:inherit} button{cursor:pointer}
+    .wrap{max-width:1100px;margin:auto;padding:22px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:10px 0 18px}
+    .brand{font-size:24px;font-weight:800;white-space:nowrap}.topnav{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}.topnav a{color:inherit;text-decoration:none;font-size:13px;font-weight:700}.badge{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:7px 10px;border-radius:999px;background:#fff}
+    .hero{background:#111;color:#fff;border-radius:24px;padding:38px 28px;margin-bottom:24px}.hero h1{font-size:clamp(30px,5vw,52px);line-height:1;margin:0 0 12px}.hero p{max-width:680px;color:#d6d6d6;margin:0;font-size:16px;line-height:1.6}
+    .section-title{font-size:20px;margin:26px 0 12px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}.photo{height:150px;background:linear-gradient(135deg,#ddd,#f7f7f7);display:flex;align-items:center;justify-content:center;color:#999;font-size:13px}.body{padding:17px}.body h3{margin:0 0 7px;font-size:18px}.body p{margin:5px 0;color:var(--muted);font-size:14px;line-height:1.45}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btn{border:0;border-radius:12px;padding:13px 16px;font-weight:700}.btn.primary{background:#111;color:#fff}.btn.secondary{background:#fff;border:1px solid var(--line)}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:20px;display:none}.panel.active{display:block}.step{display:none}.step.active{display:block}.step-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.step-head h2{margin:0 0 5px}.muted{color:var(--muted);font-size:14px}
+    .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.choice{background:#fff;border:2px solid var(--line);border-radius:16px;padding:18px;text-align:left}.choice:hover{border-color:#aaa}.choice.selected{border-color:#111}.choice strong{display:block;margin-bottom:5px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:700}.field input,.field textarea{border:1px solid #d8d8d8;border-radius:12px;padding:12px 13px;background:#fff}.field textarea{min-height:90px;resize:vertical}
+    .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}.product{border:1px solid var(--line);border-radius:15px;padding:15px;display:flex;justify-content:space-between;gap:12px;align-items:center}.product h4{margin:0 0 5px}.price{font-weight:800}.qty{display:flex;align-items:center;gap:8px}.qty button{width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:10px}.qty span{min-width:22px;text-align:center;font-weight:700}
+    .summary{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}.summary-row{display:flex;justify-content:space-between;padding:7px 0}.summary-total{font-size:20px;font-weight:800}.notice{background:#f5f5f5;border-radius:14px;padding:13px 14px;margin-top:14px;color:#444;font-size:14px;line-height:1.5}.success{border-left:4px solid var(--ok)}
+    .work-mini{display:flex;justify-content:flex-end;margin:8px 0 6px}.nav{display:flex;justify-content:space-between;gap:12px;margin-top:20px}.btn.block{flex:1}.hidden{display:none!important}
+    footer{padding:28px 0;color:var(--muted);font-size:12px;text-align:center}
+    @media(max-width:850px){.grid,.choices{grid-template-columns:1fr}.menu-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding:28px 20px}.wrap{padding:16px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">EL HUANUQUEÑO</div>
+    <nav class="topnav"><a href="#sedes">Nosotros</a><a href="#pedido">Pide aquí</a><a href="#trabaja">Trabaja con nosotros</a><a href="#contacto">Contáctanos</a></nav>
+    <div class="badge">PROTOTIPO · 1 INDEX</div>
+  </header>
+
+  <section class="hero">
+    <h1>Haz tu pedido fácil.</h1>
+    <p>Selecciona la sede más cercana, indica si comerás en el local, pedirás para llevar o necesitarás delivery, arma tu pedido y envíalo directamente al WhatsApp de la sede correspondiente.</p>
+  </section>
+
+  <h2 class="section-title" id="sedes">Visítanos en nuestras sedes</h2>
+  <div class="grid" id="branches"></div>
+
+  <div class="work-mini" id="trabaja"><button class="btn secondary" onclick="openJobs()">Trabaja con nosotros</button></div>
+
+  <section class="panel active" id="orderPanel">
+    <div class="step active" data-step="1" id="pedido">
+      <div class="step-head"><div><h2>1. Selecciona tu sede</h2><div class="muted">El pedido se enviará al WhatsApp de la sede que elijas.</div></div></div>
+      <div class="choices" id="branchChoices"></div>
+    </div>
+
+    <div class="step" data-step="2">
+      <div class="step-head"><div><h2>2. ¿Cómo harás tu pedido?</h2><div class="muted" id="selectedBranchText"></div></div></div>
+      <div class="choices">
+        <button class="choice" data-mode="pickup"><strong>🥡 Para llevar</strong><span class="muted">Recógelo en la sede.</span></button>
+        <button class="choice" data-mode="dinein"><strong>🍽️ Comer aquí</strong><span class="muted">Indica tu número de mesa.</span></button>
+        <button class="choice" data-mode="delivery"><strong>🛵 Delivery</strong><span class="muted">Indica tu dirección.</span></button>
+      </div>
+    </div>
+
+    <div class="step" data-step="3">
+      <div class="step-head"><div><h2>3. Tus datos</h2><div class="muted">Estos datos se incluirán en el mensaje de WhatsApp.</div></div></div>
+      <div class="form-grid">
+        <div class="field"><label>Nombre</label><input id="customerName" placeholder="Ej. Juan Pérez"></div>
+        <div class="field"><label>Celular (opcional)</label><input id="customerPhone" placeholder="Ej. 999 999 999"></div>
+        <div class="field full hidden" id="tableField"><label>Número de mesa</label><input id="tableNumber" inputmode="numeric" placeholder="Ej. 12"></div>
+        <div class="field full hidden" id="addressField"><label>Dirección para delivery</label><textarea id="address" placeholder="Calle, número, referencia, distrito..."></textarea></div>
+      </div>
+      <div class="notice">Puedes colocar una referencia para facilitar la ubicación. En este prototipo no se usa GPS automático; más adelante se puede integrar mapa/geolocalización si lo deseas.</div>
+    </div>
+
+    <div class="step" data-step="4">
+      <div class="step-head"><div><h2>4. Selecciona tu pedido</h2><div class="muted">Los productos y precios son de ejemplo.</div></div></div>
+      <div class="menu-grid" id="menu"></div>
+      <div class="summary"><div class="summary-row"><span>Subtotal</span><strong id="subtotal">S/ 0.00</strong></div><div class="summary-row"><span>Delivery</span><strong id="deliveryFee">S/ 0.00</strong></div><div class="summary-row summary-total"><span>Total</span><strong id="total">S/ 0.00</strong></div></div>
+    </div>
+
+    <div class="step" data-step="5">
+      <div class="step-head"><div><h2>5. Revisa y envía</h2><div class="muted">Se abrirá WhatsApp con el pedido preparado para la sede seleccionada.</div></div></div>
+      <div id="finalSummary"></div>
+      <div class="notice success"><strong>Importante:</strong> al enviar el pedido por WhatsApp, acércate a caja y menciona que acabas de realizar el pedido online para que puedan confirmarlo.</div>
+    </div>
+
+    <div class="step" data-step="6">
+      <div class="step-head"><div><h2>Pedido preparado</h2><div class="muted">El flujo termina en WhatsApp de la sede.</div></div></div>
+      <div class="notice success"><strong>¡Listo!</strong> WhatsApp se abrirá en una nueva pestaña. Allí podrás confirmar el pedido con la sede.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn secondary block hidden" id="backBtn">Atrás</button>
+      <button class="btn primary block" id="nextBtn">Continuar</button>
+    </div>
+  </section>
+
+  <section class="panel" id="jobsPanel"><div class="step-head"><div><h2>Trabaja con nosotros</h2><div class="muted">Completa tus datos, elige la sede y envía tu postulación por WhatsApp. Allí podrás adjuntar tu currículum.</div></div></div><div class="form-grid"><div class="field full"><label>Nombre completo</label><input id="jobName" placeholder="Ingresa tu nombre completo"></div><div class="field full"><label>Experiencia</label><textarea id="jobExperience" placeholder="Cuéntanos brevemente tu experiencia laboral"></textarea></div><div class="field full"><label>Elige para qué sede deseas postular</label><select id="jobBranch"><option value="">Selecciona una sede</option></select></div></div><div class="actions"><button class="btn primary" onclick="sendJob()">Envía tu currículum aquí</button></div><div class="notice">Al pulsar el botón se abrirá WhatsApp de la sede seleccionada con un mensaje preparado. Luego adjunta tu currículum desde WhatsApp.</div></section>
+
+  <footer id="contacto">EL HUANUQUEÑO · Prototipo independiente · Las imágenes, nombres, direcciones, precios y números de WhatsApp están en la configuración del archivo.</footer>
+</div>
+
+<script>
+// ============================
+// 1) CONFIGURACIÓN DEL NEGOCIO
+// ============================
+const CONFIG = {
+  businessName: 'EL HUANUQUEÑO',
+  branches: [
+    { id:'A', name:'Sede A', address:'Dirección A', whatsapp:'51999999991', image:'' },
+    { id:'B', name:'Sede B', address:'Dirección B', whatsapp:'51999999992', image:'' },
+    { id:'C', name:'Sede C', address:'Dirección C', whatsapp:'51999999993', image:'' }
+  ],
+  deliveryFee: 0,
+  menu: [
+    {id:1,name:'Plato de ejemplo 1',price:15.90},
+    {id:2,name:'Plato de ejemplo 2',price:18.90},
+    {id:3,name:'Plato de ejemplo 3',price:22.90},
+    {id:4,name:'Bebida de ejemplo',price:6.00},
+    {id:5,name:'Postre de ejemplo',price:8.50},
+    {id:6,name:'Combo de ejemplo',price:28.90}
+  ]
+};
+
+const state = { step:1, branch:null, mode:null, name:'', phone:'', table:'', address:'', cart:{} };
+
+const $ = id => document.getElementById(id);
+function money(v){return new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN'}).format(v).replace('PEN','S/');}
+function cartItems(){ return CONFIG.menu.map(p=>({...p,qty:state.cart[p.id]||0})).filter(p=>p.qty>0); }
+function subtotal(){return cartItems().reduce((s,p)=>s+p.price*p.qty,0)}
+function goStep(n){
+  state.step=n;
+  document.querySelectorAll('.step').forEach(el=>el.classList.toggle('active',Number(el.dataset.step)===n));
+  $('backBtn').classList.toggle('hidden',n===1);
+  $('nextBtn').textContent = n===5 ? 'Enviar pedido por WhatsApp' : (n===6 ? 'Finalizado' : 'Continuar');
+  if(n===2) $('selectedBranchText').textContent = `${state.branch.name} · ${state.branch.address}`;
+  if(n===4) renderMenu();
+  if(n===5) renderFinalSummary();
+  if(n===6) $('nextBtn').disabled=true;
+  window.scrollTo({top:document.getElementById('orderPanel').offsetTop-15,behavior:'smooth'});
+}
+function renderBranches(){
+  $('branches').innerHTML = CONFIG.branches.map(b=>`<article class="card"><div class="photo">${b.image?`<img src="${b.image}" alt="${b.name}" style="width:100%;height:100%;object-fit:cover">`:'FOTO DE SEDE (PENDIENTE)'}</div><div class="body"><h3>${b.name}</h3><p>${b.address}</p><div class="actions"><button class="btn primary" onclick="selectBranch('${b.id}')">Elegir esta sede</button></div></div></article>`).join('');
+  $('branchChoices').innerHTML = CONFIG.branches.map(b=>`<button class="choice" onclick="selectBranch('${b.id}')"><strong>${b.name}</strong><span class="muted">${b.address}</span></button>`).join('');
+}
+function selectBranch(id){state.branch=CONFIG.branches.find(b=>b.id===id);goStep(2)}
+function renderMenu(){
+  $('menu').innerHTML = CONFIG.menu.map(p=>`<div class="product"><div><h4>${p.name}</h4><div class="price">${money(p.price)}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${state.cart[p.id]||0}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`).join('');
+  updateTotals();
+}
+function changeQty(id,delta){state.cart[id]=Math.max(0,(state.cart[id]||0)+delta);renderMenu()}
+function updateTotals(){
+  const sub=subtotal(); const fee=state.mode==='delivery'?CONFIG.deliveryFee:0; $('subtotal').textContent=money(sub); $('deliveryFee').textContent=money(fee); $('total').textContent=money(sub+fee);
+}
+function renderFinalSummary(){
+  const items=cartItems();
+  const modeLabel={pickup:'Para llevar',dinein:'Comer en el local',delivery:'Delivery'}[state.mode]||state.mode;
+  $('finalSummary').innerHTML=`<div class="notice"><strong>Sede:</strong> ${state.branch.name}<br><strong>Modalidad:</strong> ${modeLabel}<br><strong>Nombre:</strong> ${state.name||'No indicado'}${state.phone?`<br><strong>Celular:</strong> ${state.phone}`:''}${state.mode==='dinein'?`<br><strong>Mesa:</strong> ${state.table}`:''}${state.mode==='delivery'?`<br><strong>Dirección:</strong> ${state.address}`:''}</div><div class="summary"><strong>Pedido</strong>${items.map(i=>`<div class="summary-row"><span>${i.qty} × ${i.name}</span><span>${money(i.price*i.qty)}</span></div>`).join('')}<div class="summary-row summary-total"><span>Total</span><strong>${money(subtotal()+(state.mode==='delivery'?CONFIG.deliveryFee:0))}</strong></div></div>`;
+}
+function validStep(){
+  if(state.step===1) return !!state.branch;
+  if(state.step===2) return !!state.mode;
+  if(state.step===3){state.name=$('customerName').value.trim();state.phone=$('customerPhone').value.trim();state.table=$('tableNumber').value.trim();state.address=$('address').value.trim();if(!state.name)return false;if(state.mode==='dinein'&&!state.table)return false;if(state.mode==='delivery'&&!state.address)return false;return true}
+  if(state.step===4) return cartItems().length>0;
+  return true;
+}
+function initJobs(){ $('jobBranch').innerHTML='<option value="">Selecciona una sede</option>'+CONFIG.branches.map(b=>`<option value="${b.id}">${b.name}</option>`).join(''); }
+function openJobs(){ const p=document.getElementById('jobsPanel'); p.classList.add('active'); p.scrollIntoView({behavior:'smooth',block:'start'}); }
+function sendJob(){ const name=$('jobName').value.trim(), exp=$('jobExperience').value.trim(), id=$('jobBranch').value; const b=CONFIG.branches.find(x=>x.id===id); if(!name||!exp||!b){alert('Completa tu nombre, experiencia y selecciona una sede.');return;} const msg=`*POSTULACIÓN – EL HUANUQUEÑO*\n\nNombre completo: *${name}*\nExperiencia: *${exp}*\nSede seleccionada: *${b.name}*\n\nAdjuntaré mi currículum por este chat.`; window.open(`https://wa.me/${b.whatsapp}?text=${encodeURIComponent(msg)}`,'_blank'); }
+function makeWhatsAppMessage(){
+  const modeLabel={pickup:'PARA LLEVAR',dinein:'COMER EN EL LOCAL',delivery:'DELIVERY'}[state.mode];
+  const items=cartItems();
+  let msg=`*NUEVO PEDIDO ONLINE*\n\nSede: *${state.branch.name}*\nModalidad: *${modeLabel}*\nNombre: *${state.name}*`;
+  if(state.phone) msg+=`\nCelular: *${state.phone}*`;
+  if(state.mode==='dinein') msg+=`\nMesa: *${state.table}*`;
+  if(state.mode==='delivery') msg+=`\nDirección: *${state.address}*`;
+  msg+='\n\n*PEDIDO*\n';
+  items.forEach(i=>msg+=`• ${i.qty} x ${i.name} — ${money(i.price*i.qty)}\n`);
+  const fee=state.mode==='delivery'?CONFIG.deliveryFee:0;
+  msg+=`\nSubtotal: ${money(subtotal())}\nDelivery: ${money(fee)}\n*TOTAL: ${money(subtotal()+fee)}*`;
+  msg+='\n\nConfirmaré mi pedido acercándome a caja.';
+  return msg;
+}
+
+$('nextBtn').addEventListener('click',()=>{
+  if(state.step===5){
+    if(!state.branch?.whatsapp){alert('Falta configurar el WhatsApp de esta sede.');return}
+    const url=`https://wa.me/${state.branch.whatsapp}?text=${encodeURIComponent(makeWhatsAppMessage())}`;
+    window.open(url,'_blank'); goStep(6); return;
+  }
+  if(!validStep()){
+    alert('Completa los datos necesarios antes de continuar.');return;
+  }
+  goStep(state.step+1);
+});
+$('backBtn').addEventListener('click',()=>goStep(Math.max(1,state.step-1)));
+
+document.querySelectorAll('[data-mode]').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('[data-mode]').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');state.mode=btn.dataset.mode;
+  $('tableField').classList.toggle('hidden',state.mode!=='dinein');$('addressField').classList.toggle('hidden',state.mode!=='delivery');updateTotals();goStep(3);
+}));
+
+$('branches').innerHTML='';renderBranches();
+document.title=`${CONFIG.businessName} · Pedido online`; initJobs();
+</script>
+</body>
+</html>
